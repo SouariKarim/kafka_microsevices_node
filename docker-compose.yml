@@ -59,7 +59,39 @@ services:
       - PORT=8080
       - MONGO_URL=mongodb://mongo:27017/app2
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - KAFKA_TOPIC=topic1
+      - KAFKA_TOPIC1=topic1
+      - KAFKA_TOPIC2=topic2
+    depends_on:
+      - postgres
+      - kafka
+      - mongo
+  app3:
+    container_name: app3
+    build: ./app3
+    ports:
+      - 8082:8080
+    volumes:
+      - ./app3:/app
+    environment:
+      - PORT=8080
+      - POSTGRES_URL=postgres://postgres:postgres@postgres:5432/postgres
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_TOPIC=topic2
+    depends_on:
+      - postgres
+      - kafka
+  app4:
+    container_name: app4
+    build: ./app4
+    ports:
+      - 8083:8080
+    volumes:
+      - ./app4:/app
+    environment:
+      - PORT=8080
+      - MONGO_URL=mongodb://mongo:27017/app4
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_TOPIC=topic2
     depends_on:
       - postgres
       - kafka
